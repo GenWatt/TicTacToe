@@ -12,14 +12,12 @@ import com.adrian.ddd.domain.models.valueObject.Board;
 
 import io.vavr.control.Either;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Getter
-@Setter
 public class Game {
     private GameId id;
     private Board board;
@@ -30,6 +28,14 @@ public class Game {
     private final List<DomainEvent> domainEvents = new ArrayList<>();
 
     public Game() {
+        createGame();
+    }
+
+    public Either<String, Game> createGame() {
+        if (finished != null && finished != GameStatus.CREATED) {
+            return Either.left("Game already started or it's finished");
+        }
+
         this.id = new GameId(UUID.randomUUID());
         this.board = new Board();
         this.currentPlayer = Player.X;
@@ -37,6 +43,8 @@ public class Game {
         this.finished = GameStatus.CREATED;
 
         domainEvents.add(new GameCreatedEvent(this.id));
+
+        return Either.right(this);
     }
 
     public Either<String, Board> makeMove(int x, int y) {
@@ -65,9 +73,15 @@ public class Game {
         return Either.right(this.board);
     }
 
-    public void startGame() {
+    public Either<String, GameStatus> startGame() {
+        if (finished != GameStatus.CREATED) {
+            return Either.left("Game already started or it's finished");
+        }
+
         this.finished = GameStatus.IN_PROGRESS;
         domainEvents.add(new GameStartedEvent(this.id));
+
+        return Either.right(this.finished);
     }
 
     public void togglePlayer() {
