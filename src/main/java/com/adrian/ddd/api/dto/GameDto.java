@@ -6,6 +6,7 @@ import com.adrian.ddd.domain.models.valueObject.game.GameStatus;
 
 import java.util.UUID;
 
+
 public record GameDto(UUID id,
       Player currentPlayer,
       GameStatus finished,

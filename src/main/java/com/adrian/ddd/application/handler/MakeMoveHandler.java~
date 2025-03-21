@@ -25,7 +25,6 @@ public class MakeMoveHandler {
         return gameRepository.findById(command.getGameId())
                 .flatMap(game -> {
                     Either<String, Board> result = game.makeMove(command.getX(), command.getY());
-
                     if (result.isLeft()) {
                         return Mono.just(Either.left(result.getLeft()));
                     } else {

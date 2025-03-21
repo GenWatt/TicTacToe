@@ -1,7 +1,7 @@
 package com.adrian.ddd.infrastructure.presistence.mappers.game;
 
 import com.adrian.ddd.api.dto.GameDto;
-import com.adrian.ddd.domain.models.entities.Game;
+import com.adrian.ddd.domain.models.aggregate.game.Game;
 import com.adrian.ddd.domain.models.valueObject.game.GameId;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,7 +16,9 @@ public interface GameMapper {
     GameDto toDto(Game game);
 
     @Mapping(source = "id", target = "id", qualifiedByName = "uuidToGameId")
-    Game toEntity(GameDto gameDto);
+    default Game toEntity(GameDto gameDto) {
+        return Game.reconstruct(new GameId(gameDto.id()), gameDto.board(), gameDto.currentPlayer(), gameDto.winner(), gameDto.finished());
+    }
 
     @Named("uuidToGameId")
     default GameId uuidToGameId(UUID id) {

@@ -1,4 +1,4 @@
-package com.adrian.ddd.api;
+package com.adrian.ddd.api.controllers;
 
 import com.adrian.ddd.api.dto.GameDto;
 import com.adrian.ddd.application.command.CreateGameCommand;
@@ -40,9 +40,12 @@ public class GameController {
     }
 
     @PostMapping
-    public Mono<ResponseEntity<GameDto>> createGame() {
+    public Mono<ResponseEntity<Result<GameDto>>> createGame() {
         return createGameHandler.handle(new CreateGameCommand())
-                .map(ResponseEntity::ok);
+                .map(either -> either.fold(
+                        error -> ResponseEntity.badRequest().body(Result.failure(error)),
+                        success -> ResponseEntity.ok(Result.success(success))
+                ));
     }
 
     @GetMapping("/{gameId}")

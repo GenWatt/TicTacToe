@@ -1,6 +1,6 @@
 package com.adrian.ddd.infrastructure.presistence.repositories.game;
 
-import com.adrian.ddd.domain.models.entities.Game;
+import com.adrian.ddd.domain.models.aggregate.game.Game;
 import com.adrian.ddd.domain.models.valueObject.game.GameId;
 import com.adrian.ddd.domain.repository.IGameRepository;
 import com.adrian.ddd.infrastructure.presistence.entities.game.GameEntity;
@@ -25,9 +25,10 @@ public class GameRepositoryImpl implements IGameRepository {
     }
 
     @Override
-    public Mono<Void> create(Game game) {
+    public Mono<Game> create(Game game) {
         GameEntity gameEntity = gameMapper.toEntity(game);
-        return reactiveGameRepository.save(gameEntity).then();
+        return reactiveGameRepository.save(gameEntity)
+                .map(gameMapper::toDomain);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.adrian.ddd.infrastructure.presistence.entities.game;
 
-import com.adrian.ddd.domain.models.aggregate.game.Game;
+import com.adrian.ddd.domain.models.aggregate.game.GameAggregate;
 import com.adrian.ddd.domain.models.valueObject.Board;
 import com.adrian.ddd.domain.models.valueObject.Player;
 import com.adrian.ddd.domain.models.valueObject.game.GameId;
@@ -31,7 +31,7 @@ public class GameEntity implements Persistable<GameId>  {
     @Transient
     private boolean isNew = true;
 
-    public GameEntity(Game game) {
+    public GameEntity(GameAggregate game) {
         this.id = game.getId();
         this.currentPlayer = game.getCurrentPlayer();
         this.finished = game.getFinished();
