@@ -1,5 +1,5 @@
 package com.adrian.ddd.domain.models.valueObject;
 
-public enum Player {
+public enum PlayerType {
     X, O
 }

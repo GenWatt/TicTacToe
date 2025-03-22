@@ -49,7 +49,7 @@ public class GameController {
     }
 
     @GetMapping("/{gameId}")
-    public Mono<ResponseEntity<GameDto>> getGame(@PathVariable String gameId) {
+    public Mono<ResponseEntity<Result<GameDto>>> getGame(@PathVariable String gameId) {
         return getGameByIdHandler.handle(new GetGameByIdQuery(new GameId(UUID.fromString(gameId))))
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
@@ -67,7 +67,7 @@ public class GameController {
     }
 
     @PutMapping("/{gameId}/start")
-    public Mono<ResponseEntity<GameDto>> startGame(@PathVariable String gameId) {
+    public Mono<ResponseEntity<Result<GameDto>>> startGame(@PathVariable String gameId) {
         return startGameHandler.handle(new StartGameCommand(new GameId(UUID.fromString(gameId))))
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());

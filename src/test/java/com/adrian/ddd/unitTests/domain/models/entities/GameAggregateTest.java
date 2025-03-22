@@ -2,7 +2,7 @@ package com.adrian.ddd.unitTests.domain.models.entities;
 
 import com.adrian.ddd.domain.models.aggregate.game.Game;
 import com.adrian.ddd.domain.models.valueObject.Board;
-import com.adrian.ddd.domain.models.valueObject.Player;
+import com.adrian.ddd.domain.models.valueObject.PlayerType;
 import com.adrian.ddd.domain.models.valueObject.game.GameStatus;
 import io.vavr.control.Either;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ class GameAggregateTest {
         Game game = Game.createGame().get();
 
         // Then
-        assertEquals(GameStatus.CREATED, game.getFinished(), "New game should be in CREATED state");
+        assertEquals(GameStatus.CREATED, game.getGameStatus(), "New game should be in CREATED state");
         Board board = game.getBoard();
         assertNotNull(board, "Board should not be null");
         assertEquals(3, board.getSize(), "Board size should be 3");
@@ -39,7 +39,7 @@ class GameAggregateTest {
 
         // Then
         assertTrue(result.isRight(), "startGame should succeed");
-        assertEquals(GameStatus.IN_PROGRESS, game.getFinished(), "Game should be in IN_PROGRESS state after starting");
+        assertEquals(GameStatus.IN_PROGRESS, game.getGameStatus(), "Game should be in IN_PROGRESS state after starting");
     }
 
     @Test
@@ -47,7 +47,7 @@ class GameAggregateTest {
         // Given
         Game game = Game.createGame().get();
         game.startGame();
-        Player initialPlayer = game.getCurrentPlayer();
+        PlayerType initialPlayerType = game.getCurrentPlayerType();
 
         // When
         Either<String, Board> result = game.makeMove(0, 0);
@@ -55,8 +55,8 @@ class GameAggregateTest {
         // Then
         assertTrue(result.isRight(), "Move should succeed");
         Board board = result.get();
-        assertEquals(initialPlayer, board.getCell(0, 0), "The cell (0,0) should be occupied by the initial player");
-        assertNotEquals(initialPlayer, game.getCurrentPlayer(), "Current player should be toggled after a valid move");
+        assertEquals(initialPlayerType, board.getCell(0, 0), "The cell (0,0) should be occupied by the initial player");
+        assertNotEquals(initialPlayerType, game.getCurrentPlayerType(), "Current player should be toggled after a valid move");
     }
 
     @Test
@@ -116,7 +116,7 @@ class GameAggregateTest {
         assertTrue(move5.isRight(), "Winning move should succeed");
 
         // Then
-        assertEquals(GameStatus.FINISHED, game.getFinished(), "Game should be finished after a winning move");
-        assertEquals(Player.X, game.getWinner(), "Player.X should be declared the winner");
+        assertEquals(GameStatus.FINISHED, game.getGameStatus(), "Game should be finished after a winning move");
+        assertEquals(PlayerType.X, game.getWinner(), "Player.X should be declared the winner");
     }
 }

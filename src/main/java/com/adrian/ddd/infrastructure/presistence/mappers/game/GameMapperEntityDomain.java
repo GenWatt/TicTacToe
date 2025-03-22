@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 public interface GameMapperEntityDomain {
 
     default Game toDomain(GameEntity gameEntity) {
-        return Game.reconstruct(gameEntity.getId(), gameEntity.getBoard(), gameEntity.getCurrentPlayer(), gameEntity.getWinner(), gameEntity.getFinished());
+        return Game.reconstruct(gameEntity.getId(), gameEntity.getBoard(), gameEntity.getCurrentPlayerType(), gameEntity.getWinner(), gameEntity.getGameStatus());
     }
 
     default GameEntity toEntity(Game game) {

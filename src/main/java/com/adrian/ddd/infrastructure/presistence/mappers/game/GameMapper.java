@@ -17,7 +17,7 @@ public interface GameMapper {
 
     @Mapping(source = "id", target = "id", qualifiedByName = "uuidToGameId")
     default Game toEntity(GameDto gameDto) {
-        return Game.reconstruct(new GameId(gameDto.id()), gameDto.board(), gameDto.currentPlayer(), gameDto.winner(), gameDto.finished());
+        return Game.reconstruct(new GameId(gameDto.id()), gameDto.board(), gameDto.currentPlayerType(), gameDto.winner(), gameDto.gameStatus());
     }
 
     @Named("uuidToGameId")

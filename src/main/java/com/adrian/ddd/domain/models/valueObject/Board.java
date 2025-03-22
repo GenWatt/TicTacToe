@@ -5,24 +5,24 @@ import java.util.Arrays;
 
 @Value
 public class Board {
-    Player[][] cells;
+    PlayerType[][] cells;
     int size = 3;
 
     public Board() {
-        this.cells = new Player[size][size];
+        this.cells = new PlayerType[size][size];
     }
 
-    public Board(Player[][] cells) {
+    public Board(PlayerType[][] cells) {
         this.cells = deepCopy(cells);
     }
 
-    public Player getCell(int x, int y) {
+    public PlayerType getCell(int x, int y) {
         return cells[x][y];
     }
 
-    public Board setCell(int x, int y, Player player) {
-        Player[][] newCells = deepCopy(cells);
-        newCells[x][y] = player;
+    public Board setCell(int x, int y, PlayerType playerType) {
+        PlayerType[][] newCells = deepCopy(cells);
+        newCells[x][y] = playerType;
 
         return new Board(newCells);
     }
@@ -36,8 +36,8 @@ public class Board {
     }
 
     public boolean isFull() {
-        for (Player[] row : cells) {
-            for (Player cell : row) {
+        for (PlayerType[] row : cells) {
+            for (PlayerType cell : row) {
                 if (cell == null) {
                     return false;
                 }
@@ -47,8 +47,8 @@ public class Board {
         return true;
     }
 
-    private Player[][] deepCopy(Player[][] original) {
-        Player[][] copy = new Player[original.length][];
+    private PlayerType[][] deepCopy(PlayerType[][] original) {
+        PlayerType[][] copy = new PlayerType[original.length][];
 
         for (int i = 0; i < original.length; i++) {
             copy[i] = Arrays.copyOf(original[i], original[i].length);
@@ -57,7 +57,7 @@ public class Board {
         return copy;
     }
 
-    public Player isWinner() {
+    public PlayerType isWinner() {
         // Check rows and columns
         for (int i = 0; i < size; i++) {
             if (cells[i][0] != null && cells[i][0] == cells[i][1] && cells[i][1] == cells[i][2]) {

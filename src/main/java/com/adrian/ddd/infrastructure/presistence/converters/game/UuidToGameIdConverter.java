@@ -7,9 +7,9 @@ import org.springframework.data.convert.ReadingConverter;
 import java.util.UUID;
 
 @ReadingConverter
-public class StringToGameIdConverter implements Converter<String, GameId> {
+public class UuidToGameIdConverter implements Converter<UUID, GameId> {
     @Override
-    public GameId convert(String source) {
-        return new GameId(UUID.fromString(source));
+    public GameId convert(UUID source) {
+        return new GameId(source);
     }
 }

@@ -6,7 +6,7 @@ import com.adrian.ddd.domain.event.game.GameStartedEvent;
 import com.adrian.ddd.domain.event.game.MakeMoveEvent;
 import com.adrian.ddd.domain.models.aggregate.AggregateRoot;
 import com.adrian.ddd.domain.models.valueObject.Board;
-import com.adrian.ddd.domain.models.valueObject.Player;
+import com.adrian.ddd.domain.models.valueObject.PlayerType;
 import com.adrian.ddd.domain.models.valueObject.game.GameId;
 import com.adrian.ddd.domain.models.valueObject.game.GameStatus;
 import io.vavr.control.Either;
@@ -18,18 +18,18 @@ import java.util.UUID;
 public class Game extends AggregateRoot {
     private GameId id;
     private Board board;
-    private Player currentPlayer;
-    private Player winner;
-    private GameStatus finished;
+    private PlayerType currentPlayerType;
+    private PlayerType winner;
+    private GameStatus gameStatus;
 
     private Game() { }
 
-    protected Game(GameId id, Board board, Player currentPlayer, Player winner, GameStatus finished) {
+    protected Game(GameId id, Board board, PlayerType currentPlayerType, PlayerType winner, GameStatus gameStatus) {
         this.id = id;
         this.board = board;
-        this.currentPlayer = currentPlayer;
+        this.currentPlayerType = currentPlayerType;
         this.winner = winner;
-        this.finished = finished;
+        this.gameStatus = gameStatus;
     }
 
     public static Either<String, Game> createGame() {
@@ -37,24 +37,24 @@ public class Game extends AggregateRoot {
         // Initialize the game state
         game.id = new GameId(UUID.randomUUID());
         game.board = new Board();
-        game.currentPlayer = Player.X;
+        game.currentPlayerType = PlayerType.X;
         game.winner = null;
-        game.finished = GameStatus.CREATED;
+        game.gameStatus = GameStatus.CREATED;
 
         game.addDomainEvent(new GameCreatedEvent(game.id));
         return Either.right(game);
     }
 
-    public static Game reconstruct(GameId id, Board board, Player currentPlayer, Player winner, GameStatus finished) {
-        return new Game(id, board, currentPlayer, winner, finished);
+    public static Game reconstruct(GameId id, Board board, PlayerType currentPlayerType, PlayerType winner, GameStatus gameStatus) {
+        return new Game(id, board, currentPlayerType, winner, gameStatus);
     }
 
     public Either<String, Board> makeMove(int x, int y) {
-        if (finished == GameStatus.FINISHED) {
+        if (gameStatus == GameStatus.FINISHED) {
             return Either.left("Game is finished");
         }
 
-        if (finished == GameStatus.CREATED) {
+        if (gameStatus == GameStatus.CREATED) {
             return Either.left("Game is not started");
         }
 
@@ -67,12 +67,12 @@ public class Game extends AggregateRoot {
         }
 
         // Update the board and record the move event
-        this.board = board.setCell(x, y, currentPlayer);
-        addDomainEvent(new MakeMoveEvent(this.id, this.currentPlayer, x, y));
+        this.board = board.setCell(x, y, currentPlayerType);
+        addDomainEvent(new MakeMoveEvent(this.id, this.currentPlayerType, x, y));
 
         checkWinner();
 
-        if (finished != GameStatus.FINISHED) {
+        if (gameStatus != GameStatus.FINISHED) {
             togglePlayer();
         }
 
@@ -80,21 +80,21 @@ public class Game extends AggregateRoot {
     }
 
     public Either<String, GameStatus> startGame() {
-        if (finished != GameStatus.CREATED) {
+        if (gameStatus != GameStatus.CREATED) {
             return Either.left("Game already started or it's finished");
         }
 
-        this.finished = GameStatus.IN_PROGRESS;
+        this.gameStatus = GameStatus.IN_PROGRESS;
         addDomainEvent(new GameStartedEvent(this.id));
-        return Either.right(this.finished);
+        return Either.right(this.gameStatus);
     }
 
     private void togglePlayer() {
-        currentPlayer = currentPlayer == Player.X ? Player.O : Player.X;
+        currentPlayerType = currentPlayerType == PlayerType.X ? PlayerType.O : PlayerType.X;
     }
 
     private void checkWinner() {
-        Player winner = board.isWinner();
+        PlayerType winner = board.isWinner();
 
         if (winner != null) {
             finishGame(winner);
@@ -103,9 +103,9 @@ public class Game extends AggregateRoot {
         }
     }
 
-    private void finishGame(Player winner) {
+    private void finishGame(PlayerType winner) {
         this.winner = winner;
-        this.finished = GameStatus.FINISHED;
+        this.gameStatus = GameStatus.FINISHED;
         addDomainEvent(new GameFinishedEvent(this.id, winner));
     }
 }

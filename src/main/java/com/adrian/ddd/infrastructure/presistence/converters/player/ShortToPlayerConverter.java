@@ -1,13 +1,13 @@
 package com.adrian.ddd.infrastructure.presistence.converters.player;
 
-import com.adrian.ddd.domain.models.valueObject.Player;
+import com.adrian.ddd.domain.models.valueObject.PlayerType;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
 
 @ReadingConverter
-public class ShortToPlayerConverter implements Converter<Short, Player> {
+public class ShortToPlayerConverter implements Converter<Short, PlayerType> {
     @Override
-    public Player convert(Short source) {
-        return Player.values()[source.intValue()];
+    public PlayerType convert(Short source) {
+        return PlayerType.values()[source.intValue()];
     }
 }

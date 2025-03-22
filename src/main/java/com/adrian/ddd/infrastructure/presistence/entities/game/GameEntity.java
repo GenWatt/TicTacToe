@@ -2,7 +2,7 @@ package com.adrian.ddd.infrastructure.presistence.entities.game;
 
 import com.adrian.ddd.domain.models.aggregate.game.Game;
 import com.adrian.ddd.domain.models.valueObject.Board;
-import com.adrian.ddd.domain.models.valueObject.Player;
+import com.adrian.ddd.domain.models.valueObject.PlayerType;
 import com.adrian.ddd.domain.models.valueObject.game.GameId;
 import com.adrian.ddd.domain.models.valueObject.game.GameStatus;
 
@@ -22,10 +22,12 @@ public class GameEntity implements Persistable<GameId>  {
     private GameId id;
 
     @Column("current_player")
-    private Player currentPlayer;
+    private PlayerType currentPlayerType;
 
-    private GameStatus finished;
-    private Player winner;
+    @Column("game_status")
+    private GameStatus gameStatus;
+
+    private PlayerType winner;
     private Board board;
 
     @Transient
@@ -33,8 +35,8 @@ public class GameEntity implements Persistable<GameId>  {
 
     public GameEntity(Game game) {
         this.id = game.getId();
-        this.currentPlayer = game.getCurrentPlayer();
-        this.finished = game.getFinished();
+        this.currentPlayerType = game.getCurrentPlayerType();
+        this.gameStatus = game.getGameStatus();
         this.winner = game.getWinner();
         this.board = game.getBoard();
     }

@@ -1,7 +1,7 @@
 package com.adrian.ddd.infrastructure.presistence.converters.board;
 
 import com.adrian.ddd.domain.models.valueObject.Board;
-import com.adrian.ddd.domain.models.valueObject.Player;
+import com.adrian.ddd.domain.models.valueObject.PlayerType;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.convert.converter.Converter;
@@ -14,7 +14,7 @@ public class BoardReadingConverter implements Converter<String, Board> {
     @Override
     public Board convert(String source) {
         try {
-            Player[][] cells = objectMapper.readValue(source, Player[][].class);
+            PlayerType[][] cells = objectMapper.readValue(source, PlayerType[][].class);
             return new Board(cells);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to deserialize board", e);
