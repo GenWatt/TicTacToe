@@ -1,7 +1,7 @@
-package com.adrian.ddd.application.handler;
+package com.adrian.ddd.application.handler.game;
 
 import com.adrian.ddd.api.dto.GameDto;
-import com.adrian.ddd.application.query.GetGameByIdQuery;
+import com.adrian.ddd.application.query.game.GetGameByIdQuery;
 import com.adrian.ddd.domain.Result;
 import com.adrian.ddd.infrastructure.presistence.mappers.game.GameMapperImpl;
 import com.adrian.ddd.infrastructure.presistence.repositories.game.GameRepositoryImpl;

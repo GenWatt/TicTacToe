@@ -1,4 +1,4 @@
-package com.adrian.ddd.application.command;
+package com.adrian.ddd.application.command.game;
 
 import com.adrian.ddd.domain.models.valueObject.game.GameId;
 import lombok.Data;

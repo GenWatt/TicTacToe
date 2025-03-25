@@ -1,14 +1,14 @@
 package com.adrian.ddd.api.controllers;
 
 import com.adrian.ddd.api.dto.GameDto;
-import com.adrian.ddd.application.command.CreateGameCommand;
-import com.adrian.ddd.application.command.MakeMoveCommand;
-import com.adrian.ddd.application.command.StartGameCommand;
-import com.adrian.ddd.application.handler.CreateGameHandler;
-import com.adrian.ddd.application.handler.GetGameByIdHandler;
-import com.adrian.ddd.application.handler.MakeMoveHandler;
-import com.adrian.ddd.application.handler.StartGameHandler;
-import com.adrian.ddd.application.query.GetGameByIdQuery;
+import com.adrian.ddd.application.command.game.CreateGameCommand;
+import com.adrian.ddd.application.command.game.MakeMoveCommand;
+import com.adrian.ddd.application.command.game.StartGameCommand;
+import com.adrian.ddd.application.handler.game.CreateGameHandler;
+import com.adrian.ddd.application.handler.game.GetGameByIdHandler;
+import com.adrian.ddd.application.handler.game.MakeMoveHandler;
+import com.adrian.ddd.application.handler.game.StartGameHandler;
+import com.adrian.ddd.application.query.game.GetGameByIdQuery;
 import com.adrian.ddd.domain.Result;
 import com.adrian.ddd.domain.models.valueObject.game.GameId;
 import org.springframework.beans.factory.annotation.Autowired;

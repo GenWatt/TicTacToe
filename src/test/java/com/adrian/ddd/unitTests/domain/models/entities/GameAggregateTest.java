@@ -1,20 +1,32 @@
 package com.adrian.ddd.unitTests.domain.models.entities;
 
 import com.adrian.ddd.domain.models.aggregate.game.Game;
+import com.adrian.ddd.domain.models.entities.Player;
 import com.adrian.ddd.domain.models.valueObject.Board;
 import com.adrian.ddd.domain.models.valueObject.PlayerType;
 import com.adrian.ddd.domain.models.valueObject.game.GameStatus;
 import io.vavr.control.Either;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameAggregateTest {
 
+    private Player player1;
+    private Player player2;
+
+    @BeforeEach
+    void setUp() {
+        // Create players before each test
+        player1 = Player.create("Player1").get();
+        player2 = Player.create("Player2").get();
+    }
+
     @Test
     void givenNewGame_whenCreated_thenStatusIsCreatedAndBoardIsEmpty() {
         // Given & When
-        Game game = Game.createGame().get();
+        Game game = Game.createGame(player1, player2).get();
 
         // Then
         assertEquals(GameStatus.CREATED, game.getGameStatus(), "New game should be in CREATED state");
@@ -32,7 +44,7 @@ class GameAggregateTest {
     @Test
     void givenCreatedGame_whenStartGame_thenStatusIsInProgress() {
         // Given
-        Game game = Game.createGame().get();
+        Game game = Game.createGame(player1, player2).get();
 
         // When
         Either<String, GameStatus> result = game.startGame();
@@ -45,7 +57,7 @@ class GameAggregateTest {
     @Test
     void givenStartedGame_whenMakeValidMove_thenBoardIsUpdatedAndPlayerIsToggled() {
         // Given
-        Game game = Game.createGame().get();
+        Game game = Game.createGame(player1, player2).get();
         game.startGame();
         PlayerType initialPlayerType = game.getCurrentPlayerType();
 
@@ -62,7 +74,7 @@ class GameAggregateTest {
     @Test
     void givenStartedGame_whenMoveOutOfBounds_thenReturnError() {
         // Given
-        Game game = Game.createGame().get();
+        Game game = Game.createGame(player1, player2).get();
         game.startGame();
         int size = game.getBoard().getSize();
 
@@ -77,7 +89,7 @@ class GameAggregateTest {
     @Test
     void givenStartedGame_whenMoveOnNonEmptyCell_thenReturnError() {
         // Given
-        Game game = Game.createGame().get();
+        Game game = Game.createGame(player1, player2).get();
         game.startGame();
         // First move at (0,0)
         Either<String, Board> firstMove = game.makeMove(0, 0);
@@ -94,7 +106,7 @@ class GameAggregateTest {
     @Test
     void givenWinningMove_whenPlayed_thenGameIsFinishedAndWinnerIsSet() {
         // Given: Simulate a win on the top row for Player.X
-        Game game = Game.createGame().get();
+        Game game = Game.createGame(player1, player2).get();
         game.startGame();
 
         // In the default turn order, Player.X moves first

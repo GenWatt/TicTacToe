@@ -5,6 +5,7 @@ import com.adrian.ddd.domain.event.game.GameFinishedEvent;
 import com.adrian.ddd.domain.event.game.GameStartedEvent;
 import com.adrian.ddd.domain.event.game.MakeMoveEvent;
 import com.adrian.ddd.domain.models.aggregate.AggregateRoot;
+import com.adrian.ddd.domain.models.entities.Player;
 import com.adrian.ddd.domain.models.valueObject.Board;
 import com.adrian.ddd.domain.models.valueObject.PlayerType;
 import com.adrian.ddd.domain.models.valueObject.game.GameId;
@@ -22,6 +23,9 @@ public class Game extends AggregateRoot {
     private PlayerType winner;
     private GameStatus gameStatus;
 
+    private Player player1;
+    private Player player2;
+
     private Game() { }
 
     protected Game(GameId id, Board board, PlayerType currentPlayerType, PlayerType winner, GameStatus gameStatus) {
@@ -32,9 +36,12 @@ public class Game extends AggregateRoot {
         this.gameStatus = gameStatus;
     }
 
-    public static Either<String, Game> createGame() {
+    public static Either<String, Game> createGame(Player player1, Player player2) {
         Game game = new Game();
+
         // Initialize the game state
+        game.player1 = player1;
+        game.player2 = player2;
         game.id = new GameId(UUID.randomUUID());
         game.board = new Board();
         game.currentPlayerType = PlayerType.X;

@@ -1,7 +1,7 @@
-package com.adrian.ddd.application.handler;
+package com.adrian.ddd.application.handler.game;
 
 import com.adrian.ddd.api.dto.GameDto;
-import com.adrian.ddd.application.command.MakeMoveCommand;
+import com.adrian.ddd.application.command.game.MakeMoveCommand;
 import com.adrian.ddd.domain.models.valueObject.Board;
 import com.adrian.ddd.infrastructure.presistence.mappers.game.GameMapperImpl;
 import com.adrian.ddd.infrastructure.presistence.repositories.game.GameRepositoryImpl;

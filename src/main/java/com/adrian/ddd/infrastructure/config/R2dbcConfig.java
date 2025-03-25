@@ -46,7 +46,7 @@ public class R2dbcConfig extends AbstractR2dbcConfiguration {
                 new IntToScoreConverter(),
                 new ScoreToIntConverter(),
                 new PlayerIdToUuidConverter(),
-                new UuidToPlayerConverter()
+                new UuidToPlayerIdConverter()
         );
 
         return R2dbcCustomConversions.of(PostgresDialect.INSTANCE, converters);
